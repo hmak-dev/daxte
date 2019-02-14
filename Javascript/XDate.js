@@ -4,8 +4,20 @@ class XDate {
         // Set default context
         this.context = "gregorian";
 
-        // If no parameters were given
-        if (a === undefined) {
+        // If no parameters were given or only a context was passed
+        if (a === undefined || typeof a == "string") {
+            var ctx = this.context;
+            
+            // If the second parameter was a string
+            if (a !== undefined && typeof a == "string") {
+                ctx = a;
+
+                // Check if the context is a valid context
+                if (!["gregorian","persian","hijri"].includes(this.context)) {
+                    throw `Invalid context '${this.context}'`;
+                }
+            }
+
             // Create a new date
             a = new Date;
 
@@ -16,6 +28,9 @@ class XDate {
             
             // Generate julian day number
             this.generateJulianDayNumber();
+
+            // Convert to context
+            this.convertContext(ctx);
         
         // If only a date was give
         } else if (a instanceof Date && c === undefined && d === undefined) {
@@ -37,6 +52,9 @@ class XDate {
 
             // Generate julian day number
             this.generateJulianDayNumber();
+
+            // Convert to context
+            this.toContext();
         
         // If a number was given
         } else if (typeof a == "number" && c === undefined && d === undefined) {
