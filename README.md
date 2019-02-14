@@ -54,6 +54,8 @@ let xd = new XDate(1440, 3, 18, "hijri");
 let xd = new XDate(2458528, "persian");
 ```
 
+---
+
 ## Methods
 ### clone()
 This method will create a clone of your XDate object into another separate one
@@ -63,6 +65,8 @@ This method will generate a julian day number based on context and date componen
 
 ### dayOfWeek(fix = 1)
 This method will return the week day of the current date. The fix parameter is used for offseting the output
+
+---
 
 ### convertContext(context, createClone = false)
 This will convert date components into the given context
@@ -81,6 +85,8 @@ This method will return new date components in the given context, and the output
 }
 ```
 
+---
+
 ### offsetDays(days, createClone = false)
 This method will offset the current date by days. The day parameter can be a negative or positive day count
 
@@ -93,6 +99,7 @@ This method will offset the current date by years. The years parameter can be a 
 ###### Note:
 The **createClone** parameter in these three methods will act just like **convertContext** method
 
+---
 
 ### toGregorian()
 ### toPersian()
@@ -102,6 +109,7 @@ These three methods are same as **toContext** method but they are named for an e
 ### toJulian()
 This method will return the julian day number of the instance date
 
+---
 
 ## Helper Methods
 ### persianCal(jy)
