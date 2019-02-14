@@ -263,22 +263,22 @@ class XDate {
 
 
     // Create a persian calendar to consider leap years
-    persianCal(jy) {
+    persianCal(py) {
         var breaks = [-61, 9, 38, 199, 426, 686, 756, 818, 1111, 1181, 1210, 1635, 2060, 2097, 2192, 2262, 2324, 2394, 2456, 3178],
             bl = breaks.length,
-            gy = jy + 621,
+            gy = py + 621,
             leapJ = -14,
             jp = breaks[0],
-            jm, jump, leap, leapG, march, n, i
-        if (jy < jp || jy >= breaks[bl - 1]) throw new Error('Invalid Persian year ' + jy);
+            pm, jump, leap, leapG, march, n, i
+        if (py < jp || py >= breaks[bl - 1]) throw new Error('Invalid Persian year ' + py);
         for (i = 1; i < bl; i += 1) {
-            jm = breaks[i];
-            jump = jm - jp;
-            if (jy < jm) break;
+            pm = breaks[i];
+            jump = pm - jp;
+            if (py < pm) break;
             leapJ = leapJ + this.div(jump, 33) * 8 + this.div(this.mod(jump, 33), 4);
-            jp = jm;
+            jp = pm;
         }
-        n = jy - jp;
+        n = py - jp;
         leapJ = leapJ + this.div(n, 33) * 8 + this.div(this.mod(n, 33) + 3, 4);
         if (this.mod(jump, 33) === 4 && jump - n === 4) leapJ += 1;
         leapG = this.div(gy, 4) - this.div((this.div(gy, 100) + 1) * 3, 4) - 150;
@@ -293,9 +293,9 @@ class XDate {
         }
     }
     // Convert perisan date to julian day number
-    p2d(jy, jm, jd) {
-        var r = this.persianCal(jy);
-        return this.g2d(r.gy, 3, r.march) + (jm - 1) * 31 - this.div(jm, 7) * (jm - 7) + jd - 1;
+    p2d(py, pm, pd) {
+        var r = this.persianCal(py);
+        return this.g2d(r.gy, 3, r.march) + (pm - 1) * 31 - this.div(pm, 7) * (pm - 7) + pd - 1;
     }
     // Convert julian day number to persian date
     d2p(jdn) {
@@ -347,9 +347,9 @@ class XDate {
 
 
     // Convert hijri date to julian day number
-    h2d(year, month, day) {
+    h2d(hy, hm, hd) {
         var epoch = 1948439.5;
-        return (day + Math.ceil(29.5 * (month - 1)) + (year - 1) * 354 + Math.trunc((3 + (11 * year)) / 30) + epoch) - 1;
+        return (hd + Math.ceil(29.5 * (hm - 1)) + (hy - 1) * 354 + Math.trunc((3 + (11 * hy)) / 30) + epoch) - 1;
     }
     // Convert julian day number to hijri date
     d2h(jdn) {
