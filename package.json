@@ -1,0 +1,25 @@
+{
+  "name": "datex",
+  "version": "1.0.0",
+  "description": "Calendar date convertor",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hmak-me/XDate.git"
+  },
+  "keywords": [
+    "Date",
+    "Calendar",
+    "Date",
+    "Convertor"
+  ],
+  "author": "Hossein Maktoobian",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/hmak-me/XDate/issues"
+  },
+  "homepage": "https://github.com/hmak-me/XDate#readme"
+}

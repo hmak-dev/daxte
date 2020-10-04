@@ -1,15 +1,29 @@
-class XDate {
+module.exports = class XDate {
+    static convert(dateStr, to = 'persian', from = "gregorian", join = true) {
+        let date = '', time = '';
+        [date, time] = dateStr.split(' ');
+
+        let xd = new XDate(...date.split('-').map(p => parseInt(p) || 0), from);
+        xd = xd.toContext(to);
+        date = `${xd.year}/${xd.month}/${xd.day}`;
+
+        if (!join)
+            return [[xd.year, xd.month, xd.day], time]
+
+        return [date, time];
+    }
+
     // General Constructor
     constructor(a, b, c, d) {
         // Set default context
         this.context = "gregorian";
 
         // If no parameters were given or only a context was passed
-        if (a === undefined || typeof a == "string") {
+        if (a === undefined || typeof a === "string") {
             var ctx = this.context;
-            
+
             // If the second parameter was a string
-            if (a !== undefined && typeof a == "string") {
+            if (a !== undefined && typeof a === "string") {
                 ctx = a;
 
                 // Check if the context is a valid context
@@ -25,17 +39,17 @@ class XDate {
             this.day = a.getDate();
             this.month = a.getMonth() + 1;
             this.year = a.getFullYear();
-            
+
             // Generate julian day number
             this.generateJulianDayNumber();
 
             // Convert to context
             this.convertContext(ctx);
-        
-        // If only a date was give
+
+            // If only a date was give
         } else if (a instanceof Date && c === undefined && d === undefined) {
             // If the second parameter was a string
-            if (b !== undefined && typeof b == "string") {
+            if (b !== undefined && typeof b === "string") {
                 // Use that as the context
                 this.context = b;
 
@@ -55,11 +69,11 @@ class XDate {
 
             // Convert to context
             this.toContext();
-        
-        // If a number was given
-        } else if (typeof a == "number" && c === undefined && d === undefined) {
+
+            // If a number was given
+        } else if (typeof a === "number" && c === undefined && d === undefined) {
             // If the second parameter was a string
-            if (b !== undefined && typeof b == "string") {
+            if (b !== undefined && typeof b === "string") {
                 // Use that as the context
                 this.context = b;
 
@@ -77,8 +91,8 @@ class XDate {
             this.year = date.year;
             this.month = date.month;
             this.day = date.day;
-        
-        // If all parameters were given
+
+            // If all parameters were given
         } else if (a !== undefined && b !== undefined && c !== undefined && d !== undefined) {
             // Check if the last parameter is a valid context
             if (!["gregorian","persian","hijri"].includes(d)) {
@@ -90,11 +104,11 @@ class XDate {
             this.month = b;
             this.day = c;
             this.context = d;
-    
+
             // Generate julian day number
             this.generateJulianDayNumber();
 
-        // Otherwise it is an invalid parameter case
+            // Otherwise it is an invalid parameter case
         } else {
             throw `Invalid parameters`;
         }
@@ -109,11 +123,11 @@ class XDate {
 
     // Generates a new julian day number from the current date parameters
     generateJulianDayNumber() {
-        if (this.context == "gregorian") {
+        if (this.context === "gregorian") {
             this.jdn = this.g2d(this.year, this.month, this.day);
-        } else if (this.context == "persian") {
+        } else if (this.context === "persian") {
             this.jdn = this.p2d(this.year, this.month, this.day);
-        } else if (this.context == "hijri") {
+        } else if (this.context === "hijri") {
             this.jdn = this.h2d(this.year, this.month, this.day);
         }
     }
@@ -150,12 +164,12 @@ class XDate {
     toContext(context) {
         // If no context was given, use current context
         if (context === undefined) context = this.context;
-        
-        if (context == "gregorian") {
+
+        if (context === "gregorian") {
             return this.d2g(this.jdn);
-        } else if (context == "persian") {
+        } else if (context === "persian") {
             return this.d2p(this.jdn);
-        } else if (context == "hijri") {
+        } else if (context === "hijri") {
             return this.d2h(this.jdn);
         }
     }
@@ -220,7 +234,7 @@ class XDate {
 
             // Generate julian day number
             this.generateJulianDayNumber();
-            
+
             return this;
         }
     }
@@ -260,118 +274,4 @@ class XDate {
     toJulian() {
         return this.jdn;
     }
-
-
-    // Create a persian calendar to consider leap years
-    persianCal(py) {
-        var breaks = [-61, 9, 38, 199, 426, 686, 756, 818, 1111, 1181, 1210, 1635, 2060, 2097, 2192, 2262, 2324, 2394, 2456, 3178],
-            bl = breaks.length,
-            gy = py + 621,
-            leapJ = -14,
-            jp = breaks[0],
-            pm, jump, leap, leapG, march, n, i
-        if (py < jp || py >= breaks[bl - 1]) throw new Error('Invalid Persian year ' + py);
-        for (i = 1; i < bl; i += 1) {
-            pm = breaks[i];
-            jump = pm - jp;
-            if (py < pm) break;
-            leapJ = leapJ + this.div(jump, 33) * 8 + this.div(this.mod(jump, 33), 4);
-            jp = pm;
-        }
-        n = py - jp;
-        leapJ = leapJ + this.div(n, 33) * 8 + this.div(this.mod(n, 33) + 3, 4);
-        if (this.mod(jump, 33) === 4 && jump - n === 4) leapJ += 1;
-        leapG = this.div(gy, 4) - this.div((this.div(gy, 100) + 1) * 3, 4) - 150;
-        march = 20 + leapJ - leapG;
-        if (jump - n < 6) n = n - jump + this.div(jump + 4, 33) * 33;
-        leap = this.mod(this.mod(n + 1, 33) - 1, 4);
-        if (leap === -1) leap = 4;
-        return {
-            leap: leap,
-            gy: gy,
-            march: march
-        }
-    }
-    // Convert perisan date to julian day number
-    p2d(py, pm, pd) {
-        var r = this.persianCal(py);
-        return this.g2d(r.gy, 3, r.march) + (pm - 1) * 31 - this.div(pm, 7) * (pm - 7) + pd - 1;
-    }
-    // Convert julian day number to persian date
-    d2p(jdn) {
-        var gy = this.d2g(jdn).year,
-            year = gy - 621,
-            r = this.persianCal(year),
-            jdn1f = this.g2d(gy, 3, r.march),
-            day, month, k
-        k = jdn - jdn1f;
-        var dms = [ 31, 31, 31, 31, 31, 31, 30, 30, 30, 30, 30, r.leap === 1 ? 30 : 29 ];
-        if (k >= 0) {
-            if (k <= 185) {
-                month = 1 + this.div(k, 31);
-                day = this.mod(k, 31) + 1;
-                return { year, month, day, weekDay: this.dayOfWeek(2), lastDayInMonth: dms[month - 1] };
-            } else {
-                k -= 186;
-            }
-        } else {
-            year -= 1;
-            k += 179;
-            if (r.leap === 1) k += 1;
-        }
-        month = 7 + this.div(k, 30);
-        day = this.mod(k, 30) + 1;
-        return { year, month, day, weekDay: this.dayOfWeek(2), lastDayInMonth: dms[month - 1] };
-    }
-
-
-    // Convert gregorian date to julian day number
-    g2d(gy, gm, gd) {
-        var d = this.div((gy + this.div(gm - 8, 6) + 100100) * 1461, 4) + this.div(153 * this.mod(gm + 9, 12) + 2, 5) + gd - 34840408;
-        d = d - this.div(this.div(gy + 100100 + this.div(gm - 8, 6), 100) * 3, 4) + 752;
-        return d;
-    }
-    // Convert julian day number to gregorian date
-    d2g(jdn) {
-        var j, i, day, month, year;
-        j = 4 * jdn + 139361631;
-        j = j + this.div(this.div(4 * jdn + 183187720, 146097) * 3, 4) * 4 - 3908;
-        i = this.div(this.mod(j, 1461), 4) * 5 + 308;
-        day = this.div(this.mod(i, 153), 5) + 1;
-        month = this.mod(this.div(i, 153), 12) + 1;
-        year = this.div(j, 1461) - 100100 + this.div(8 - month, 6);
-        var isLeapYear = year % 100 === 0 ? year % 400 === 0 : year % 4 === 0;
-        var dms = [31, isLeapYear ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-        return { year, month, day, weekDay: this.dayOfWeek(), lastDayInMonth: dms[month - 1] };
-    }
-
-
-    // Convert hijri date to julian day number
-    h2d(hy, hm, hd) {
-        var epoch = 1948439.5;
-        return (hd + Math.ceil(29.5 * (hm - 1)) + (hy - 1) * 354 + Math.trunc((3 + (11 * hy)) / 30) + epoch) - 1;
-    }
-    // Convert julian day number to hijri date
-    d2h(jdn) {
-        var epoch = 1948439.5;
-
-        jdn = Math.trunc(jdn) + 0.5;
-        var year = Math.trunc(((30 * (jdn - epoch)) + 10646) / 10631);
-        var month = Math.min(12, Math.ceil((jdn - (29 + this.h2d(year, 1, 1))) / 29.5) + 1);
-        var day = parseInt(jdn - this.h2d(year, month, 1)) + 1;
-
-        var isLeap = [2,5,7,10,13,16,18,21,24,26,29].includes(year % 30);
-        var lastDay = [1,3,5,7,9,11].includes(month) || (month == 12 && isLeap) ? 30 : 29;
-
-        return { year, month, day, weekDay: this.dayOfWeek(), lastDayInMonth: lastDay };
-    }
-
-
-    // Asset functions for date calculations
-    div(a, b) {
-        return ~~(a / b);
-    }
-    mod(a, b) {
-        return a - ~~(a / b) * b;
-    }    
 }
