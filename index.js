@@ -16,7 +16,13 @@ class Datex {
         if (calendar) {
             let y, m, d;
 
+            if (year === undefined) {
+                year = new Date;
+            }
+
             if (year instanceof Date) {
+                calendar = 'gregorian';
+
                 y = year.getFullYear();
                 m = year.getMonth() + 1;
                 d = year.getDate();
@@ -100,10 +106,5 @@ class Datex {
         return hijri.toHijri(this.jdn);
     }
 }
-
-let d = new Datex(1998, 1, 18);
-console.log(d.toJalali())
-console.log(d.toGregorian())
-console.log(d.toHijri())
 
 module.exports = Datex;

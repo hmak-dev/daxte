@@ -85,10 +85,10 @@ module.exports = class JalaliCalendar{
      */
     static toJalali(julianDayNumber) {
         const gregYear = julianToGregorian(julianDayNumber).year;
-        const r = jalaliCalendar(gregYear);
+        let year = gregYear - 621;
+        const r = jalaliCalendar(year);
         const jdn1f = gregorianToJulian(gregYear, 3, r.march);
 
-        let year = gregYear - 621;
         let k = julianDayNumber - jdn1f;
         let day;
         let month;
