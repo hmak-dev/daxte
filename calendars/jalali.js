@@ -45,7 +45,7 @@ function jalaliCalendar(year) {
     }
 }
 
-module.exports = {
+module.exports = class JalaliCalendar{
     /**
      * Returns the number of days in a month
      * @param year: number
@@ -53,18 +53,18 @@ module.exports = {
      * @param isLeap: boolean
      * @returns {number}
      */
-    daysInMonth(year, month, isLeap) {
+    static daysInMonth(year, month, isLeap) {
         return [ 31, 31, 31, 31, 31, 31, 30, 30, 30, 30, 30, isLeap ? 30 : 29 ][month - 1];
-    },
+    }
 
     /**
      * Checks to see if a year is leap or not
      * @param year
      * @returns {boolean}
      */
-    isLeapYear(year) {
+    static isLeapYear(year) {
         return jalaliCalendar(year).leap === 1;
-    },
+    }
 
     /**
      * Calculate the julian day number of a jalali date
@@ -73,19 +73,19 @@ module.exports = {
      * @param day: number
      * @returns {number}
      */
-    toJulian(year, month, day) {
+    static toJulian(year, month, day) {
         let r = jalaliCalendar(year);
         return gregorianToJulian(r.gregYear, 3, r.march) + (month - 1) * 31 - div(month, 7) * (month - 7) + day - 1;
-    },
+    }
 
     /**
      * Convert a julian day number to a jalali date object
      * @param julianDayNumber: number
      * @returns {{year: number, month: number day: number, isLeapYear: boolean, daysInMonth: number}}
      */
-    toJalali(julianDayNumber) {
+    static toJalali(julianDayNumber) {
         const gregYear = julianToGregorian(julianDayNumber).year;
-        const r = jalaliCalendar(year);
+        const r = jalaliCalendar(gregYear);
         const jdn1f = gregorianToJulian(gregYear, 3, r.march);
 
         let year = gregYear - 621;
@@ -104,7 +104,7 @@ module.exports = {
                     month,
                     day,
                     isLeapYear,
-                    daysInMonth: this.daysInMonth(year, month, isLeapYear),
+                    daysInMonth: JalaliCalendar.daysInMonth(year, month, isLeapYear),
                 };
             } else {
                 k -= 186;
@@ -122,7 +122,7 @@ module.exports = {
             month,
             day,
             isLeapYear,
-            daysInMonth: this.daysInMonth(year, month, isLeapYear),
+            daysInMonth: JalaliCalendar.daysInMonth(year, month, isLeapYear),
         };
-    },
+    }
 };

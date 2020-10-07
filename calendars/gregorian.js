@@ -1,6 +1,6 @@
 const { div, mod } = require('../assets');
 
-module.exports = {
+module.exports = class GregorianCalendar {
     /**
      * Returns the number of days in a month
      * @param year: number
@@ -8,18 +8,18 @@ module.exports = {
      * @param isLeap: boolean
      * @returns {number}
      */
-    daysInMonth(year, month, isLeap) {
+    static daysInMonth(year, month, isLeap) {
         return [31, isLeap ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][month - 1];
-    },
+    }
 
     /**
      * Checks to see if a year is leap or not
      * @param year
      * @returns {boolean}
      */
-    isLeapYear(year) {
+    static isLeapYear(year) {
         return year % 100 === 0 ? year % 400 === 0 : year % 4 === 0;
-    },
+    }
 
     /**
      * Calculate the julian day number of a gregorian date
@@ -28,18 +28,18 @@ module.exports = {
      * @param day: number
      * @returns {number}
      */
-    toJulian(year, month, day) {
+    static toJulian(year, month, day) {
         return div((year + div(month - 8, 6) + 100100) * 1461, 4) +
                 div(153 * mod(month + 9, 12) + 2, 5) + day - 34840408 -
                 div(div(year + 100100 + div(month - 8, 6), 100) * 3, 4) + 752;
-    },
+    }
 
     /**
      * Convert a julian day number to a gregorian date object
      * @param julianDayNumber: number
      * @returns {{year: number, month: number day: number, isLeapYear: boolean, daysInMonth: number}}
      */
-    toGregorian(julianDayNumber) {
+    static toGregorian(julianDayNumber) {
         let j;
         let i;
         let day;
@@ -54,8 +54,8 @@ module.exports = {
         month = mod(div(i, 153), 12) + 1;
         year = div(j, 1461) - 100100 + div(8 - month, 6);
 
-        const isLeapYear = this.isLeapYear(year);
-        const daysInMonth = this.daysInMonth(year, month, isLeapYear);
+        const isLeapYear = GregorianCalendar.isLeapYear(year);
+        const daysInMonth = GregorianCalendar.daysInMonth(year, month, isLeapYear);
 
         return {
             year,
@@ -64,5 +64,5 @@ module.exports = {
             isLeapYear,
             daysInMonth,
         };
-    },
+    }
 };
