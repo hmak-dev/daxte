@@ -1,12 +1,12 @@
 {
-  "name": "datex",
+  "name": "daxte",
   "version": "1.0.0",
   "description": "Date converter for different calendars",
   "main": "index.js",
   "scripts": {},
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/hmak-me/datex.git"
+    "url": "git+https://github.com/hmak-me/daxte.git"
   },
   "keywords": [
     "Date",
@@ -25,7 +25,7 @@
   "author": "Hossein Maktoobian",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/hmak-me/datex/issues"
+    "url": "https://github.com/hmak-me/daxte/issues"
   },
-  "homepage": "https://github.com/hmak-me/datex#readme"
+  "homepage": "https://github.com/hmak-me/daxte#readme"
 }

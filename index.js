@@ -2,11 +2,11 @@ const hijri = require('./calendars/hijri');
 const jalali = require('./calendars/jalali');
 const gregorian = require('./calendars/gregorian');
 
-class Datex {
+class Daxte {
     jdn = 0;
 
     /**
-     * Create a Datex instance
+     * Create a Daxte instance
      * @param year { Date | string | number }
      * @param month { string | number }
      * @param day { string | number }
@@ -32,7 +32,7 @@ class Datex {
                 } else if (typeof year === 'number' && typeof month === 'number' && typeof day === 'number') {
                     [y, m, d] = [year, month, day];
                 } else {
-                    throw new Error('Invalid parameters provided to Datex')
+                    throw new Error('Invalid parameters provided to Daxte')
                 }
             }
 
@@ -107,4 +107,4 @@ class Datex {
     }
 }
 
-module.exports = Datex;
+module.exports = Daxte;

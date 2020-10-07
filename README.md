@@ -1,4 +1,4 @@
-# Datex
+# Daxte
 
 Using this class you will be able to convert dates between 3 different calendars
 
@@ -16,7 +16,7 @@ This is the default constructor that doesn't take any arguments and will get cur
 **Note:** The default calendar will be 'gregorian' in this constructor.
 
 ```javascript
-const datex = new Datex();
+const daxte = new Daxte();
 ```
 
 ---
@@ -28,7 +28,7 @@ This constructor will take a Date object as its only parameter and uses it for c
 ```javascript
 const date = new Date(2020, 10, 7);
 
-const datex = new Datex(date);
+const daxte = new Daxte(date);
 ```
 
 ---
@@ -38,10 +38,10 @@ In this constructor you can pass date in order of **Year**, **Month**, **Day** t
 **Note:** You need to specify the calendar of the specified date, otherwise it uses 'gregorian' as default.
 
 ```javascript
-let datex = new Datex(1998, 1, 18);
+let daxte = new Daxte(1998, 1, 18);
 ```
 ```javascript
-let datex = new Datex(1376, 10, 28, 'jalali');
+let daxte = new Daxte(1376, 10, 28, 'jalali');
 ```
 
 ---
